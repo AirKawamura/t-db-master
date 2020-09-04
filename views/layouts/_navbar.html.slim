@@ -1,0 +1,13 @@
+nav.navbar.is-info aria-label=("main navigation") role="navigation" style="z-index: 31;"
+  .navbar-brand
+  .navbar-menu
+    .navbar-start
+      = link_to icon("fas", "user", "エンジニア"), engineers_path, class: "navbar-item #{is_active?(['engineers', 'management_engineers', 'management_resume_uploader'])}"
+      / = link_to icon("fas", "clipboard-list", "案件"), "#", class: "navbar-item"
+    .navbar-middle
+      .navbar-item style="margin: 3px 0 0 34px;"
+        = image_pack_tag "logo_inverted.png", style: "opacity: 0.5;"
+    .navbar-end
+      - if policy([:admin, :user]).index?
+        = link_to icon("fas", "cog", "管理画面"), admin_root_path, class: "navbar-item #{is_active?(['admin'])}"
+      = render "layouts/user_menu"

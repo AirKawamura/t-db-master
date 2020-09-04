@@ -1,0 +1,17 @@
+= render "topnav"
+
+.container style="max-width: 500px;"
+  .card
+    header.card-header
+      p.card-header-title 企業情報を変更
+    .card-content
+      == render 'form'
+
+  .card style="margin-top: 2rem;"
+    header.card-header
+      p.card-header-title 企業を削除
+    .card-content
+      p style="margin-bottom: 1rem;" 企業を削除すると、関連するすべてのデータ（エンジニアや案件など）が削除されます。
+      .field
+        .control
+          = link_to "企業削除する", [:root, @company], data: { confirm: "本当に削除しますか？この操作は取り消せません。" }, method: :delete, class: "button is-danger is-light"

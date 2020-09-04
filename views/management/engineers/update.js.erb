@@ -1,0 +1,2 @@
+$tr = document.querySelector("tr[data-uuid='<%= @engineer.uuid %>']");
+$tr.innerHTML = "<%= escape_javascript(render @engineer) %>";

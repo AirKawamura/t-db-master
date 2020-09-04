@@ -1,0 +1,49 @@
+// @import "../color";
+
+// .sidenav {
+//   position: fixed;
+//   left: 0;
+//   width: 60px;
+//   z-index: 40;
+//   height: 100%;
+//   overflow: hidden;
+//   background-color: $blue;
+
+//   + main {
+//     padding-left: 60px;
+//   }
+  
+//   ul {
+//     li {
+//       a {
+//         color: rgba(255, 255, 255, 0.5);
+//         display: block;
+//         width: 100%;
+//         padding: 14px 0;
+//         text-align: center;
+
+//         p {
+//           font-size: 0.75rem;
+//           font-weight: bold;
+//           margin-top: 3px;
+//         }
+//       }
+
+//       &:hover, &:focus, &.is-active {
+//         background-color: $blue-dark;
+
+//         a {
+//           color: #fff;
+//         }
+//       }
+//     }
+
+//     li:first-child {
+//       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+//     }
+
+//     li.has-border {
+//       border-top: 1px solid rgba(255, 255, 255, 0.2);
+//     }
+//   }
+// }

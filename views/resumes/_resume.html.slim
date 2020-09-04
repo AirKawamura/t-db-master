@@ -1,0 +1,26 @@
+- if @resume.nil?
+  .empty-state style="padding: 10rem 2rem; background-color: whitesmoke;"
+    p.has-text-centered スキルシートが登録されていません
+- else
+  nav.level.is-mobile style="margin-bottom: 0.5rem;"
+    .level-left
+      .level-item
+        .tabs
+          ul
+            - engineer.resumes.each.with_index(1) do |resume, i|
+              li class="#{'is-active' if resume == @resume}"
+                = link_to icon("fas", "file", "File#{i}"), engineer_resume_path(engineer, resume), remote: true
+    .level-right
+      - if @resume.converted
+        .level-item
+          = link_to icon("fas", "external-link-alt", "別ウィンドウで開く"), @resume.file_url(:preview), target: :blank
+
+  - if @resume.converted
+    object data="#{@resume.file_url(:preview)}" type="application/pdf" class="pdfview" width="100%" height="600"
+  - else
+    .empty-state style="padding: 10rem 2rem; background-color: whitesmoke;"
+      p.has-text-centered style="margin-bottom: 1rem;" プレビューを表示するための準備をしています<br>（通常は1時間ほどで完了します）
+      p.has-text-centered
+        = "オリジナルファイルは今すぐ"
+        = link_to "ダウンロード", @resume.file_url, target: :blank
+        = "できます"

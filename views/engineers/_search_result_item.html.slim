@@ -1,0 +1,20 @@
+= link_to engineer, class: "search-result-item", remote: true, data: {uuid: engineer.uuid} do
+  nav.level.is-mobile style="margin-bottom: 0.25rem;"
+    .level-left
+      .level-item
+        = engineer.display_name.blank? ? "氏名非公開" : engineer.display_name
+    .level-right
+      .level-item
+        = "#{engineer.age}歳" if engineer.age
+      .level-item
+        span
+          = icon "fas", "map-marker-alt", (engineer.cached_location_list.blank? ? "未登録" : engineer.cached_location_list.split(",")&.first)
+      .level-item
+        span = icon "fas", "yen-sign", "#{engineer.price}万"
+
+  p.has-text-weight-bold style="margin-bottom: 0.25rem;"
+    = engineer.cached_career_role_list&.split(",")&.first
+
+  .tags
+    - engineer.cached_skill_list&.split(",")&.each do |skill|
+      span.tag.is-success.is-light = skill

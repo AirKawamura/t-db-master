@@ -1,0 +1,27 @@
+= form_for [:root, @company] do |f|
+  - if @company.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@company.errors.count, "error")} prohibited this company from being saved:"
+      ul
+        - @company.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :name, class: "label"
+    .control
+      = f.text_field :name, class: "input", placeholder: "株式会社SHIFT", required: true
+
+  .field
+    label.label 有効にする機能
+    .field
+      label.checkbox
+        = f.check_box :engineer_management
+        = f.label :engineer_management
+    / .field
+      label.checkbox
+        = f.check_box :job_management
+        = f.label :job_management
+
+  .buttons.is-centered
+    = link_to "キャンセル", root_companies_path, class: "button is-text"
+    = f.submit class: "button is-primary"

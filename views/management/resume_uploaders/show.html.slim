@@ -1,0 +1,18 @@
+= render "topnav"
+
+.container style="max-width: 700px;"
+  h1.title.is-4 スキルシートをアップロード
+  
+  = form_with url: management_resume_uploader_path, multipart: true do |f|
+    = f.hidden_field :uuid, value: params[:uuid]
+    .field
+      .control
+        = f.hidden_field "files[]", class: "upload-data"
+        = f.file_field "files[]", class: "upload-file"
+
+    .uppy-dashboard
+
+    p.has-text-grey.has-text-centered style="margin: 2rem 0 2rem 0;" = icon "fas", "info-circle", "ファイル名に含まれる\"名前\"や\"イニシャル\"を自動で識別します（ファイル名は公開されません）"
+    
+    .buttons.is-centered
+      = f.submit "アップロード", class: "button is-primary"

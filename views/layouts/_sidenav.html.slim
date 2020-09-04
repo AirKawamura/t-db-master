@@ -1,0 +1,15 @@
+aside.sidenav
+  ul
+    li style="height: 47px;"
+      = link_to icon("fas", "home", class: "fa-lg"), "#"
+
+    li class="#{is_active?(['engineers', 'management_engineers', 'management_resume_uploader'])}"
+      = link_to engineers_path do
+        = icon("far", "user", class: "fa-lg is-marginless")
+        p エンジニア
+
+    - if policy([:admin, :user]).index?
+      li class="#{is_active?('admin')} has-borderX"
+        = link_to admin_root_path
+          = icon("fas", "cog", class: "fa-lg is-marginless")
+          p 管理画面

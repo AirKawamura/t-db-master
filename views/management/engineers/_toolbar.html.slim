@@ -1,0 +1,15 @@
+nav.level.is-mobile
+  .level-left
+    .level-item
+      h1.title.is-4 #{current_company.name}のエンジニア
+  .level-right
+    - if controller.action_name == "bulk_edit"
+      .level-item
+        p.has-text-grey 変更内容は自動で保存されます
+      .level-item
+        = link_to "完了", management_engineers_path, class: "button is-primary", id: "done"
+    - else
+      .level-item
+        = link_to "エンジニアを追加", management_resume_uploader_path, class: "button is-primary is-light"
+      .level-item
+        = link_to "編集モード", bulk_edit_management_engineers_path, class: "button is-primary"

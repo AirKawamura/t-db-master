@@ -1,0 +1,31 @@
+= render "topnav"
+
+.container style="max-width: 700px;"
+  nav.level.is-mobile
+    .level-left
+      .level-item
+        h2.title.is-4 企業管理
+    .level-right
+      .level-item
+        = link_to icon("fas", "plus", "企業を追加"), new_root_company_path, class: "button is-primary"
+
+  table.table.is-fullwidth
+    thead
+      tr
+        th 社名
+        th style="width: 150px;" エンジニア管理
+        th style="width: 120px;" エンジニア数
+        / th style="width: 150px;" 案件管理
+        / th style="width: 120px;" 案件数
+        th style="width: 100px;"
+
+    tbody
+      - @companies.each do |company|
+        tr
+          td = company.name
+          td = "有効" if company.engineer_management
+          td.has-text-grey = company.engineer_management ? company.engineers_count : nil
+          / td = "有効" if company.job_management
+          / td
+          td = link_to "編集", edit_root_company_path(company)
+          

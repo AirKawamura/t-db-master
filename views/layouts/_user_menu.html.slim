@@ -1,0 +1,9 @@
+- if user_signed_in?
+  .navbar-item.has-dropdown.is-hoverable
+    = link_to icon("fas", "user-circle", class: "fa-lg"), "#", class: "navbar-link is-arrowless", style: "padding: 0.5rem 1rem;"
+    .navbar-dropdown.is-right
+      p.navbar-item.has-text-grey = current_user.name
+      / = link_to icon("fas", "user", "プロフィール"), current_user, class: "navbar-item"
+      / = link_to icon("fas", "cog", "アカウント設定"), account_root_path, class: "navbar-item"
+      hr.dropdown-divider
+      = link_to icon("fas", "sign-out-alt", "ログアウト"), destroy_user_session_path, method: :delete, class: "navbar-item"

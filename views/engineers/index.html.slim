@@ -1,0 +1,193 @@
+head
+script src="https://shifttoiroeng-test.rec.edirium.co.jp/scripts/recommender.js"
+//script src="app\views\engineers\test.js.erb"
+body
+
+= render "topnav"
+
+.search-container.columns.is-marginless.is-mobile
+  .search-menu.column.is-narrow.is-3
+    = form_with url: engineers_path, method: :get, scope: :search, local: true do |f|
+      .field
+        label.label 職種
+        .control-list
+          - @career_roles.each.with_index do |career_role, i|
+            .control
+              label.checkbox
+                = f.check_box :career_role, { id: "career_role_#{i}", checked: @career_role&.include?(career_role), multiple: true }, career_role, nil
+                = f.label :career_role, career_role, for: "career_role_#{i}"
+
+      .field
+        label.label スキル
+        .control
+          = f.text_field :skill, value: @skill, data: { "tagify-enforce-whitelist": true, "tagify-whitelist": @skill_list }, class: "tagify", placeholder: "Java、React、AWSなど"
+
+      .field
+        label.label 単価
+        .field.has-addons
+          p.control.is-expanded
+            span.select.is-fullwidth
+              = f.select :min_price, options_for_select(@price_list, @min_price), include_blank: "下限なし"
+          p.control
+            a.button.is-static 〜
+          p.control.is-expanded
+            span.select.is-fullwidth
+              = f.select :max_price, options_for_select(@price_list, @max_price), include_blank: "上限なし"
+
+      .field
+        label.label 勤務可能エリア
+        .control
+          = f.text_field :location, value: @location, data: { "tagify-enforce-whitelist": true, "tagify-whitelist": @location_list }, class: "tagify", placeholder: "都道府県を入力"
+
+      .field
+        label.label 商流
+        .field
+          .control
+            span.select.is-fullwidth
+              = f.select :commercial_distribution, options_for_select(@commercial_distribution_list, @commercial_distribution), include_blank: "指定なし"
+              
+      .form-footer
+        nav.level.is-mobile
+          .level-left
+          .level-right
+            .level-item
+              = f.submit "検索", class: "button is-primary"
+
+
+  .search-result.column.is-narrow.is-3
+    nav.level.is-mobile.is-marginless style="border-bottom: 1px solid #dbdbdb; padding: 1rem 1.5rem;"
+      .level-left
+        .level-item
+          strong style="margin-right: 0.25rem; font-size: 1.25rem;"
+            = @engineers.size
+          |
+            件
+      .level-right
+        .level-item
+          .control
+            span.select
+              = select_tag :order, options_for_select(%w(更新日時の新しい順), nil)
+
+    = render partial: "search_result_item", collection: @engineers, as: :engineer
+
+  .main-content.column.is-narrow.is-6
+    - if @engineer
+      = render "engineer", engineer: @engineer
+    - else
+      p.is-size-5.has-text-grey.has-text-centered style="margin-top: calc(50vh - 75px);"
+        = icon "far", "hand-point-left", "リストからエンジニアを選択してください"
+
+    #rec_area
+
+    #rec_area_search
+
+    input onclick="rec_all()" type="button" value="レコメンド表示" data-turbolinks="false" 
+javascript:
+
+  var params = {
+                serv: 'shifttoiroeng',
+                env: 'test',
+                n: '5',
+                item: "",
+                user:"",
+                filt:[],
+                cat: [],
+                kw:[],
+          };
+  var keywordArray = [];
+
+  //URLから検索キーワード取得
+  function get_keyword(){
+    var keyword = location.search; 
+    keyword = decodeURI(keyword);
+    keyword = keyword.split("=");
+    for (var c of keyword) {
+        //一つ一つ取り出して
+        var cArray = c.split("&"); 
+        //さらに分割
+        if(cArray[0] != ""){
+          //数値なら検索キーワードから除外
+          if(isNaN(cArray[0])){
+          keywordArray.push(cArray[0]);
+          }
+        }
+      }
+    //先頭と末尾は必要ないので削除
+    keywordArray.shift();
+    keywordArray.pop();
+    params.kw = keywordArray;
+    console.log(keywordArray)
+  }
+
+  //セッションからID取得
+  function get_user() {
+      console.log(location.search.split('&'));
+      var cookies = document.cookie; //全てのcookieを取り出して
+      var cookiesArray = cookies.split(";"); // ;で分割し配列に
+      for (var c of cookiesArray) {
+        //一つ一つ取り出して
+        var cArray = c.split("="); //さらに=で分割して配列に
+        if (cArray[0] == "edrvid") {
+          // 取り出したいkeyと合致したら
+          //console.log(cArray[1]);  // [key,value]
+          user_id = cArray[1];
+          console.log(user_id)
+          params.user=user_id
+          
+          //console.log(this.user_id);
+        
+        }
+      }
+    }
+
+  //おすすめ表示
+  //これはエンジニア詳細ではなく、エンジニアホーム画面に置く。
+  function edi_rec(){
+          params.area = 'englist',
+          item = "";
+          edirium_rec.retrieve_recs(params, edirium_rec.write_recs, 'rec_area');
+  }
+
+   function edi_rec_search(){
+          params.area = 'search',
+          
+          edirium_rec.retrieve_recs(params, edirium_rec.write_recs, 'rec_area_search');
+  }
+
+  function convert(){
+      
+      edirium_rec.notify_convert(params);
+    }
+
+    function rec_all(){
+      get_user()
+      //get_id()
+      //edi_rec_skill()
+      //edi_rec_price()
+      edi_rec()
+      get_keyword()
+      edi_rec_search()
+      
+      //get_search()
+      //edi_rec_search()
+    }
+  /*
+  document.addEventListener("turbolinks:load", function(){
+      get_user()
+      //get_id()
+      //edi_rec_skill()
+      //edi_rec_price()
+      edi_rec()
+      get_keyword()
+      edi_rec_search()
+  })
+
+  */
+  
+  //window.onload = 
+  
+  //window.onload = get_user()
+  
+  //window.onload = edi_rec()
+  //window.onload = get_keyword()
+  //window.onload = edi_rec_search()

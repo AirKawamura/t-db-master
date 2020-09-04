@@ -1,0 +1,47 @@
+= form_for [:admin, @user] do |f|
+  - if @user.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
+      ul
+        - @user.errors.full_messages.each do |message|
+          li = message
+    br
+
+  .field
+    = f.label :name, class: "label"
+    .control
+      = f.text_field :name, class: "input", placeholder: "山田 太郎", required: true
+
+  br
+  .field
+    = f.label :email, class: "label"
+    .control
+      = f.text_field :email, class: "input", required: true
+
+  br
+  .field
+    label.label 役割
+    .field
+      .control
+        label.radio.has-text-weight-bold
+          = f.radio_button :role, :member, checked: @user.role_member? || @user.new_record?, required: true
+          = "メンバー"
+      p style="margin: 0.5rem 0 0 1rem;;" [エンジニアを探す] 機能のみ利用できます。
+
+    .field style="margin-top: 1rem;"
+      .control
+        label.radio.has-text-weight-bold
+          = f.radio_button :role, :manager, checked: @user.role_manager?, required: true
+          = "マネージャー"
+        p style="margin: 0.5rem 0 0 1rem;;" 「メンバー」の権限に加えて、自社のエンジニアに関する管理権限を持ちます。
+
+    .field style="margin-top: 1rem;"
+      .control
+        label.radio.has-text-weight-bold
+          = f.radio_button :role, :admin, checked: @user.role_admin?, required: true
+          = "管理者"
+        p style="margin: 0.5rem 0 0 1rem;;" 「マネージャー」の権限に加えて、toiroユーザーに関する管理権限を持ちます。
+
+  .buttons.is-centered style="margin-top: 2rem;"
+    = link_to "キャンセル", admin_users_path, class: "button is-text"
+    = f.submit class: "button is-primary"

@@ -1,0 +1,9 @@
+= form_with model: [:management, @engineer] do |f|
+  .field style="margin-bottom: 0.5rem;"
+    .control
+      = f.text_field :skill_list, value: @engineer.skill_list.join(","), class: "tagify", placeholder: "スキルを入力(最大10個まで)", data: { "tagify-dropdown-enabled": 0, "tagify-max-tags": 10 }
+      
+  .field
+    .buttons
+      = f.submit class: "button is-small is-primary"
+      = link_to "キャンセル", [:management, @engineer], remote: true, class: "button is-small is-text"

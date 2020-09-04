@@ -1,0 +1,7 @@
+.gridjs-wrapper {
+  box-shadow: none;
+  
+  &:last-of-type {
+    border-radius: 0;
+  }
+}

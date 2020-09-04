@@ -1,0 +1,8 @@
+nav.navbar.topnav
+  .navbar-menu
+    .navbar-brand
+      = link_to "エンジニアを探す", engineers_path, class: "navbar-item is-tab #{is_active?(engineers: [:index, :show])}"
+      = link_to "自社のエンジニア", management_engineers_path, class: "navbar-item is-tab #{is_active?(['management_engineers', 'management_resume_uploader'])}"
+    .navbar-end
+      / = link_to "保存済みリスト", "#", class: "navbar-item"
+      / = render "layouts/user_menu"

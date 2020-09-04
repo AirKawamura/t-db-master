@@ -1,0 +1,36 @@
+= render "topnav"
+        
+.container
+  = render "toolbar"
+
+  .table-container
+    table.table.is-hoverable.engineer-list
+      thead
+        tr
+          th style="min-width: 50px;"
+          th style="min-width: 100px;" 公開設定
+          th style="min-width: 120px;"
+            p data-tippy-content="氏名は公開されません" = icon "fas", "lock", "氏名"
+            p data-tippy-content="ふりがなは公開されません" = icon "fas", "lock", "ふりがな"
+          th style="min-width: 120px;"
+            p data-tippy-content="氏名やイニシャルシャル等を入力" 公開する名前
+          th style="min-width: 120px;"
+            p data-tippy-content="生年月日は公開されません" = icon "fas", "lock", "生年月日"
+            p 年齢
+          th style="min-width: 80px;" 性別
+          th style="min-width: 100px;" 国籍
+          th style="min-width: 120px;"
+            p data-tippy-content="雇用形態は公開されません" = icon "fas", "lock", "雇用形態"
+          th style="min-width: 120px;"
+            p data-tippy-content="所属会社は公開されません" = icon "fas", "lock", "所属会社"
+            p 商流
+          th style="min-width: 100px;" 希望単価
+          th style="min-width: 150px;" 勤務可能エリア
+          th style="min-width: 250px;" 職種
+          th style="min-width: 250px;" スキルタグ
+          th style="min-width: 120px;" スキルシート
+          th style="min-width: 150px;" 特記事項
+          th style="min-width: 50px;"
+
+      tbody
+        = render @engineers.includes(:company)

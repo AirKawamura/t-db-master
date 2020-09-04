@@ -1,0 +1,9 @@
+- flash.each do |f|
+  - if f[1].present?
+    - case f[0]
+    - when "notice"
+      javascript:
+        new Notyf().success({message: "#{f[1]}"})
+    - when "alert"
+      javascript:
+        new Notyf().error({message: "#{f[1]}"})

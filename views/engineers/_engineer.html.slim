@@ -1,0 +1,243 @@
+
+script src="https://shifttoiroeng-test.rec.edirium.co.jp/scripts/recommender.js"
+
+body
+nav.level.is-mobile
+  .level-left
+    .level-item
+      p.has-text-grey
+        = "提供元："
+        b = engineer.company.name
+  / .level-right
+    .level-item
+      = link_to icon("far", "bookmark", "保存"), engineer, class: "button is-light", remote: true
+    .level-item
+      = link_to icon("fas", "comment", "コンタクトを取る"), engineer, class: "button is-success", remote: true
+
+section.engineer-section.summary-section
+  nav.level.is-mobile style="margin-bottom: 0.5rem;"
+    .level-left
+      .level-item data-tippy-content="名前"
+        p.has-text-weight-bold = engineer.display_name.blank? ? "名前未登録" : engineer.display_name
+      .level-item data-tippy-content="年齢"
+        = engineer.age ? "#{engineer.age}歳" : "年齢未登録"
+      .level-item data-tippy-content="性別"
+        = "#{engineer.gender_i18n}"
+      .level-item data-tippy-content="国籍"
+        span = icon "fas", "globe-asia", (engineer.nationality.blank? ? "未登録" : engineer.nationality)
+      .level-item data-tippy-content="勤務可能エリア"
+        span = icon "fas", "map-marker-alt", (engineer.cached_location_list.blank? ? "未登録" : engineer.locations.join("・"))
+    .level-right
+      .level-item data-tippy-content="商流"
+        = engineer.commercial_distribution_i18n
+      .level-item
+        = "希望単価："
+        strong.is-size-4 = engineer.price ? "#{engineer.price}万円" : "未登録"
+
+  nav.level.career-role-list.is-mobile
+    .level-left
+      - engineer.career_roles.each.with_index do |role, i|
+        .level-item
+          = link_to role.name, engineers_path(search: {career_role: [role.name]}), class: "career-role #{'is-main' if i == 0}"
+
+section.engineer-section.engineer-skill
+  p.section-title スキル
+  .tags
+    - engineer.skills.each do |skill|
+      = link_to skill.name, engineers_path(search: {skill: skill.name}), class: "span tag is-success is-light is-medium"
+
+section.engineer-section.resume-section
+  = render "resumes/resume", engineer: engineer
+
+
+
+//input onload="edi_rec(this.value)" type="hidden" value=engineer.id
+
+
+//body onload="edi_rec(this.value)" type="hidden" value="engineer.id" /
+
+
+input#engineer_id type="hidden" value=engineer.id
+
+input#price type="hidden" value=engineer.price
+
+
+
+//input#location type="hidden" value=engineer.locations
+
+#rec_area
+
+#rec_area_skill
+
+#rec_area_price
+
+//#rec_area_location
+
+#rec_area_search
+
+
+input onclick="convert()" type="button"  value="コンバージョンテスト" data-turbolinks="false" 
+
+input onclick="rec_all()" type="button" value="レコメンド表示" data-turbolinks="false" 
+
+input onclick="test()" type="button" value="テスト" 
+//div data-turbolinks="false" 
+
+//input onclick="edi_rec_skill(this.value)" type="button" value=engineer.id
+
+
+javascript:
+  
+  var params = {
+                serv: 'shifttoiroeng',
+                env: 'test',
+                n: '2',
+                item: "",
+                user:"",
+                filt:[],
+                cat: [],
+          };
+  var cat =[]
+  var id;
+
+  //htmlのhiddenからid取得
+  function get_id(){
+    id = document.getElementById("engineer_id").value;
+    params.item = id;
+    console.log(id);
+  }
+
+  //セッションからユーザ取得
+  function get_user() {
+      var cookies = document.cookie; //全てのcookieを取り出して
+      var cookiesArray = cookies.split(";"); // ;で分割し配列に
+      for (var c of cookiesArray) {
+        //一つ一つ取り出して
+        var cArray = c.split("="); //さらに=で分割して配列に
+        if (cArray[0] == "edrvid") {
+          // 取り出したいkeyと合致したら
+          //console.log(cArray[1]);  // [key,value]
+          user_id = cArray[1];
+          console.log(user_id)
+
+          params.user=user_id
+          
+          //console.log(this.user_id);
+        
+        }
+      }
+    }
+
+  //おすすめ表示
+  //これはエンジニア詳細ではなく、エンジニアホーム画面に置く。
+  function edi_rec(){
+          params.area = 'englist',
+         
+          edirium_rec.retrieve_recs(params, edirium_rec.write_recs, 'rec_area');
+  }
+
+    //おすすめの中からスキルで絞り込む
+    function edi_rec_skill() {
+      skill = document.getElementsByClassName("tag is-success is-light");
+      for (var i = 0;i < skill.length; i++) {
+      //console.log(skill[i].textContent);
+      cat.push(skill[i].textContent)
+      }
+      params.area = "englist";
+      params.cat = cat;
+      //params.kw = 
+      //abc = "language.eq." + this.job.dev_lang;
+      //params.filt = this.abc
+      //this.params.filt.push(this.abc )
+
+      edirium_rec.retrieve_recs(params, edirium_rec.write_recs,
+        "rec_area_skill"
+      );
+      params.cat = "";
+    }
+
+
+    //おすすめの中から単価で絞り込む
+    function edi_rec_price(){
+      params.area = 	"englist";
+      price = document.getElementById("price");
+      console.log(price.value)
+      price_low ="price.le." + parseInt(price.value) * 1.1 
+      price_high = "price.ge." + parseInt(price.value) * 0.9
+      params.filt = [price_low,price_high]//価格の＋－10％の範囲
+     
+      //params.filt.push(price_low , price_high)
+      
+      edirium_rec.retrieve_recs(params, edirium_rec.write_recs,
+        "rec_area_price"
+      );
+      params.filt = [];
+    }
+
+   function get_search(){
+     skill = cat;
+     params.kw = skill;
+     console.log(skill);
+   }
+    /*
+    function edi_rec_location(){
+      
+      params.area = "englist3"
+      location = document.getElementById("location");
+      console.log(location.value)
+      //params.filt = "location_list.eq." + station.value;
+      //this.params.filt.push(this.abc )
+      
+      edirium_rec.retrieve_recs(
+        this.params,
+        edirium_rec.write_recs,
+        "rec_area_location"
+      );
+    }
+    */
+    
+    function edi_rec_search(){
+          params.area = 'search',
+          //params.kw = "データベースエンジニア",
+          edirium_rec.retrieve_recs(params, edirium_rec.write_recs, 'rec_area_search');
+  }
+   
+
+    function convert(){
+      get_user()
+      get_id()
+      edirium_rec.notify_convert(params);
+    }
+
+    
+    function rec_all(){
+      get_user()
+      get_id()
+      //edi_rec_skill()
+      //edi_rec_price()
+      edi_rec()
+      //get_search()
+      //edi_rec_search()
+    }
+
+    function test(){
+      alert("banana");
+    }
+
+      window.onload = get_user()
+
+      window.onload = get_id()      
+
+      window.onload = edi_rec_skill()
+
+      window.onload = edi_rec_price()
+
+      window.onload = edi_rec()
+
+      window.onload = get_search()
+
+      window.onload = edi_rec_search()
+
+ 
+      
+    //window.onload = edi_rec_location()

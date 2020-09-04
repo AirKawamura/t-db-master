@@ -1,0 +1,10 @@
+= render "topnav" if signed_in?
+
+.container style="max-width: 700px;"
+  .card
+    .card-content
+      = render @engineer
+
+  p.has-text-grey.has-text-centered style="margin-top: 2rem;"
+    = "powered by "
+    = link_to "toiro.io", root_url

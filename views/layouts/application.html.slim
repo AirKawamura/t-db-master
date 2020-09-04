@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title db.toiro
+    = csrf_meta_tags
+    = csp_meta_tag
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    
+  body data-namespace="#{controller.controller_path.split('/')[-2]}" data-controller="#{controller_path}" data-action="#{action_name}"
+    = Gon::Base.render_data
+    main
+      = render "layouts/navbar" if signed_in?
+      = yield
+
+    #modal tabindex="-1" role="dialog" aria-hidden="true"
+    = render "layouts/toaster"
+
+  

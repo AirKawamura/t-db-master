@@ -1,0 +1,29 @@
+body[data-controller="management/engineers"][data-action="bulk_edit"] {
+  .handsontable {
+    .cell {
+      background-color: #fff;
+      padding: 0.5rem;
+
+      &.htInvalid {
+        background-color: #feecf0 !important;
+        color: #cc0f35 !important;
+      }
+    }
+
+    .colHeader {
+      padding: 0.5rem;
+    }
+
+    // .header-cell {
+    //   background-color: yellow;
+    // }
+
+    // .content-cell {
+
+    // }
+  }
+
+  #nprogress .bar {
+    display: none;
+  }
+}

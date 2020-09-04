@@ -1,0 +1,7 @@
+$td = document.querySelector("tr[data-uuid='<%= @engineer.uuid %>'] .career-role-list");
+$td.innerHTML = "<%= escape_javascript(render 'management/engineers/career_roles/edit') %>";
+
+TagifySetup($td.querySelector(".tagify"), {
+  enforceWhitelist: true,
+  whitelist: "<%= @career_roles %>".split((/\s*,\s*/))
+});

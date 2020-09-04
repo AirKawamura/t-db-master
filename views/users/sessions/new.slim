@@ -1,0 +1,27 @@
+.container.is-small style="max-width: 450px;"
+  p.has-text-centered style="margin: 50px 0;"
+    = image_pack_tag 'logo.png', style: "height: 60px; width: auto;"
+
+  .card
+    .card-content
+      p.title.is-3.has-text-centered ログイン
+
+      = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+        = f.hidden_field :remember_me, value: 1
+
+        .field
+          = f.label :email, class: "label"
+          p.control
+            = f.text_field :email, class: "input is-medium is-fullwidth", autofocus: true, required: true
+
+        .field
+          = f.label :password, class: "label"
+          p.control
+            = f.password_field :password, class: "input is-medium is-fullwidth", autocomplete: "off", required: true
+
+        br
+        .field
+          p.control
+            = f.submit "ログイン", class: "button is-primary is-medium is-fullwidth"
+
+        / p.has-text-centered = link_to "パスワードを忘れた方", new_password_path(resource_name)

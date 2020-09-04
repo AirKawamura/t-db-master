@@ -1,0 +1,26 @@
+body[data-controller="management/engineers"][data-action="index"] {
+  .engineer-list {
+    th, td {
+      background-color: #fff;
+      text-align: center;
+
+      &:nth-child(3) {
+        position: sticky;
+        left: 0;
+      }
+    }
+
+    .privacy-dropdown {
+      text-align: left;
+      
+      label.radio {
+        width: 100%;
+        padding: 0.5rem 0;
+
+        input[type="radio"] {
+          margin-right: 0.75em;
+        }
+      }
+    }
+  }
+}

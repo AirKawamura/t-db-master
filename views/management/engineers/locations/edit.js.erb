@@ -1,0 +1,7 @@
+$td = document.querySelector("tr[data-uuid='<%= @engineer.uuid %>'] .location-list");
+$td.innerHTML = "<%= escape_javascript(render 'management/engineers/locations/edit') %>";
+
+TagifySetup($td.querySelector(".tagify"), {
+  enforceWhitelist: true,
+  whitelist: "<%= @locations %>".split((/\s*,\s*/))
+});

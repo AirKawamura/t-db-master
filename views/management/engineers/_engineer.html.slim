@@ -1,0 +1,96 @@
+tr data-uuid="#{engineer.uuid}"
+  td style="padding-right: 0;"
+    = link_to icon("fas", "eye"), engineer, data: {"tippy-content": "プレビュー"}, class: "button is-primary is-light"
+
+  td
+    .dropdown.privacy-dropdown
+      .dropdown-trigger
+        button.button.is-light aria-controls="dropdown-menu-privacy-#{engineer.uuid}" aria-haspopup="true" style="width: 100px; border: none;" class="#{'is-success' if engineer.privacy_unlisted? or engineer.privacy_public?}"
+          span.has-text-weight-bold = engineer.privacy_i18n
+          span.icon.is-small
+            i.fas.fa-angle-down aria-hidden="true" 
+      .dropdown-menu id="dropdown-menu-privacy-#{engineer.uuid}" role="menu"
+        .dropdown-content style="width: 400px;"
+          = form_with model: [:management, engineer], method: :patch do |f|
+            .dropdown-item
+              .field
+                .control
+                  label.radio.has-text-weight-bold
+                    = f.radio_button :privacy, :private, {checked: engineer.privacy_private?}
+                    = icon("fas", "lock", "非公開")
+                  p.has-text-grey あなたの会社のユーザーのみ閲覧できます。それ以外のユーザーはURLに直接アクセスしても閲覧できません。
+
+              .field
+                .control
+                  label.radio.has-text-weight-bold
+                    = f.radio_button :privacy, :unlisted, {checked: engineer.privacy_unlisted?}
+                    = icon("fas", "link", "限定公開")
+                  p.has-text-grey URLを知っているユーザーのみ閲覧できます。検索結果には表示されません。
+
+              .field
+                .control
+                  label.radio.has-text-weight-bold
+                    = f.radio_button :privacy, :public, {checked: engineer.privacy_public?}
+                    = icon("fas", "globe-asia", "公開")
+                  p.has-text-grey 検索結果に表示され、誰でも閲覧できます。
+
+              p.has-text-centered style="margin-top: 1rem;"
+                = f.submit "保存", class: "button is-primary"
+
+  td
+    p = engineer.full_name
+    small.has-text-grey = engineer.full_name_kana
+
+  td = engineer.display_name
+
+  td
+    - if engineer.birth_at
+      p = l(engineer.birth_at)
+      small.has-text-grey = "#{engineer.age}歳"
+
+  td = engineer.gender_i18n
+
+  td = engineer.nationality
+
+  td = engineer.employment_type_i18n
+
+  td
+    p = engineer.provider
+    small.has-text-grey = engineer.commercial_distribution_i18n
+
+  td = "#{engineer.price}万" if engineer.price
+
+  td.has-text-left.location-list
+    p style="margin-bottom: 0.25rem;"
+      = link_to "編集", locations_edit_management_engineer_path(engineer), remote: true, class: "tag is-white has-text-primary"
+    .tags.is-marginless
+      - engineer.cached_location_list&.split(",")&.each do |location|
+        span.tag.is-success.is-light = location
+
+  td.has-text-left.career-role-list
+    p style="margin-bottom: 0.25rem;"
+      = link_to "編集", career_roles_edit_management_engineer_path(engineer), remote: true, class: "tag is-white has-text-primary"
+    .tags.is-marginless
+      - engineer.cached_career_role_list&.split(",")&.each do |career_role|
+        span.tag.is-success.is-light = career_role
+
+  td.has-text-left.skill-list
+    p style="margin-bottom: 0.25rem;"
+      = link_to "編集", skills_edit_management_engineer_path(engineer), remote: true, class: "tag is-white has-text-primary"
+    .tags.is-marginless
+      - engineer.cached_skill_list&.split(",")&.each do |skill|
+        span.tag.is-success.is-light = skill
+
+  td.has-text-left
+    p style="margin-bottom: 0.25rem;"
+      = link_to "追加", management_resume_uploader_path(uuid: engineer.uuid), class: "tag is-white has-text-primary"
+    .field.is-grouped.is-grouped-multiline
+      - engineer.resumes.each.with_index(1) do |r, i|
+        .control style="margin: 0 0.5rem 0 0;"
+          .tags.has-addons.is-marginless
+            = link_to "File#{i}", r.file_url, target: :blank, data: {"tippy-content": r.file.original_filename}, class: "tag has-text-primary"
+            = link_to "", [engineer, r], data: { confirm: "本当に削除しますか？この操作は取り消せません。", "tippy-content": "削除" }, method: :delete, class: "tag is-delete"
+    
+  td = simple_format(engineer.remarks)
+
+  td = link_to icon("fas", "times"), [:management, engineer], data: { confirm: "本当に削除しますか？この操作は取り消せません。", "tippy-content": "エンジニアを削除" }, method: :delete, class: "button is-white has-text-danger"

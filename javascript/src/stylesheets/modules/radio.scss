@@ -1,0 +1,7 @@
+label.radio input[type="radio"] {
+  margin-right: 0.25em;
+}
+
+.radio:not(:last-child) {
+  margin-right: 0.5rem;
+}

@@ -1,0 +1,32 @@
+@charset "utf-8";
+
+$blue: #1e5fbb;
+$cyan: #428efb;
+$green: #48c070;
+$red: #f73f43;
+
+$primary: $cyan !default;
+$info: $blue !default;
+$link: $cyan !default;
+$link-focus-border: $cyan !default;
+
+$body-size: 14px;
+
+// navbarのブレークポイントを無効にする
+$navbar-breakpoint: 0;
+
+// card
+$card-header-shadow: none;
+
+@import "bulma/bulma.sass";
+
+
+.card-header {
+  border-bottom: 1px solid #dbdbdb;
+}
+
+a, .button {
+  > svg.svg-inline--fa {
+    margin-right: 0.25em;
+  }
+}

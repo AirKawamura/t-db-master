@@ -1,0 +1,64 @@
+= form_for [:management, @engineer] do |f|
+  - if @engineer.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@engineer.errors.count, "error")} prohibited this engineer from being saved:"
+      ul
+        - @engineer.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :company, class: "label"
+    .control
+      span.select.is-fullwidthX
+        = f.collection_select :company_id, Company.all, :id, :name, {include_blank: "選択してください"}, {required: true}
+
+  .field
+    = f.label :full_name, class: "label"
+    .control
+      = f.text_field :full_name, class: "input"
+
+  .field
+    = f.label :full_name_kana, class: "label"
+    .control
+      = f.text_field :full_name_kana, class: "input"
+
+  .field
+    = f.label :display_name, class: "label"
+    .control
+      = f.text_field :display_name, class: "input"
+
+  .field
+    = f.label :gender, class: "label"
+    .control
+      span.select = f.select :gender, Engineer.genders_i18n.invert
+
+  .field
+    = f.label :birth_at, class: "label"
+    .control
+      = f.date_field :birth_at, class: "input"
+
+  .field
+    = f.label :age, class: "label"
+    .control
+      = f.number_field :age, class: "input"
+
+  .field
+    = f.label :employment_type, class: "label"
+    .control
+      span.select = f.select :employment_type, Engineer.employment_types_i18n.invert
+
+  .field
+    = f.label :commercial_distribution, class: "label"
+    .control
+      = f.number_field :commercial_distribution, class: "input"
+
+  .field
+    = f.label :price, class: "label"
+    .control
+      = f.number_field :price, class: "input"
+
+  br
+  .field
+    .buttons
+      = f.submit class: "button is-primary"
+      = link_to "キャンセル", management_engineers_path, class: "button is-text"

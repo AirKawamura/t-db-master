@@ -1,0 +1,8 @@
+document.querySelectorAll(".search-result .search-result-item").forEach(function (item) {
+  item.classList.remove("is-active");
+});
+document.querySelector(".search-result .search-result-item[data-uuid='<%= @engineer.uuid %>']").classList.add("is-active");
+document.querySelector(".main-content").innerHTML = "<%= escape_javascript(render @engineer) %>";
+history.replaceState(null, '', "/engineers/<%= @engineer.uuid %>");
+
+tippy('[data-tippy-content]');
