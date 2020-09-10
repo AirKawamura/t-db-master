@@ -78,9 +78,9 @@ input#price type="hidden" value=engineer.price
 
 input onclick="convert()" type="button"  value="コンバージョンテスト" data-turbolinks="false" 
 
-input onclick="rec_all()" type="button" value="レコメンド表示" data-turbolinks="false" 
+//input onclick="rec_all()" type="button" value="レコメンド表示" data-turbolinks="false" 
 
-input onclick="test()" type="button" value="テスト" 
+//input onclick="test()" type="button" value="テスト" 
 //div data-turbolinks="false" 
 
 //input onclick="edi_rec_skill(this.value)" type="button" value=engineer.id
@@ -132,7 +132,6 @@ javascript:
   //これはエンジニア詳細ではなく、エンジニアホーム画面に置く。
   function edi_rec(){
           params.area = 'englist',
-         
           edirium_rec.retrieve_recs(params, edirium_rec.write_recs, 'rec_area');
   }
 
@@ -213,17 +212,18 @@ javascript:
     function rec_all(){
       get_user()
       get_id()
-      //edi_rec_skill()
-      //edi_rec_price()
+      edi_rec_skill()
+      edi_rec_price()
       edi_rec()
-      //get_search()
-      //edi_rec_search()
+      get_search()
+      edi_rec_search()
     }
 
     function test(){
-      alert("banana");
+      alert()
+      console.log("aaa")
     }
-
+      /*
       window.onload = get_user()
 
       window.onload = get_id()      
@@ -237,7 +237,9 @@ javascript:
       window.onload = get_search()
 
       window.onload = edi_rec_search()
+      */
+    
+      window.onload = rec_all()
 
- 
-      
+    
     //window.onload = edi_rec_location()
